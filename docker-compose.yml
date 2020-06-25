@@ -1,0 +1,12 @@
+version: "2"
+services:
+  mautic:
+    restart: unless-stopped
+    image: rori4/netlify-cms-github-oauth-provider
+    ports:
+      - "80:3000"
+    environment:
+      NODE_ENV: production
+      ORIGIN: http://localhost:3000
+      OAUTH_CLIENT_ID: <client_id>
+      OAUTH_CLIENT_SECRET: <client_secret>
