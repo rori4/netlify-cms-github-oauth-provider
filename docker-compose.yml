@@ -27,10 +27,10 @@ services:
       - "bash"
       - "-c"
     command: |
-      "if [ ! -f /etc/ssl/private/mautic.crt ]; then
+      "if [ ! -f /etc/ssl/private/netlifycms.crt ]; then
         echo 'ssl certificate missing, installing openssl to create a new one'
         apt-get update && apt-get install openssl -y
-        openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout /etc/ssl/private/mautic.key -out /etc/ssl/private/mautic.crt -subj '/CN=mautic.local' -days 3650
+        openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout /etc/ssl/private/netlifycms.key -out /etc/ssl/private/netlifycms.crt -subj '/CN=netlifycms.local' -days 3650
         echo 'Created new ssl certificate'
       fi
       exec nginx -g 'daemon off;'"
