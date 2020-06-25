@@ -22,7 +22,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - sslcerts:/etc/ssl/private
     depends_on:
-      - mautic
+      - netlifycms
     entrypoint:
       - "bash"
       - "-c"
