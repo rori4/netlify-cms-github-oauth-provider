@@ -1,13 +1,13 @@
 require('dotenv').config({silent: true})
 const express = require('express')
-const simpleOauthModule = require('simple-oauth2')
+const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2')
 const randomstring = require('randomstring')
 const port = process.env.PORT || 3000
 const oauthProvider = process.env.OAUTH_PROVIDER || 'github'
 const loginAuthTarget = process.env.AUTH_TARGET || '_self'
 
 const app = express()
-const oauth2 = simpleOauthModule.create({
+const config = {
   client: {
     id: process.env.OAUTH_CLIENT_ID,
     secret: process.env.OAUTH_CLIENT_SECRET
@@ -18,7 +18,7 @@ const oauth2 = simpleOauthModule.create({
     tokenPath: process.env.OAUTH_TOKEN_PATH || '/login/oauth/access_token',
     authorizePath: process.env.OAUTH_AUTHORIZE_PATH || '/login/oauth/authorize'
   }
-})
+}
 
 const originPattern = process.env.ORIGIN || ''
 if (('').match(originPattern)) {
@@ -29,8 +29,9 @@ if (('').match(originPattern)) {
   }
 }
 
+const client = new AuthorizationCode(config)
 // Authorization uri definition
-const authorizationUri = oauth2.authorizationCode.authorizeURL({
+const authorizationUri = client.authorizeURL({
   redirect_uri: process.env.REDIRECT_URL,
   scope: process.env.SCOPES || 'repo,user',
   state: randomstring.generate(32)
@@ -55,7 +56,7 @@ app.get('/callback', (req, res) => {
     options.redirect_uri = process.env.REDIRECT_URL
   }
 
-  oauth2.authorizationCode.getToken(options, (error, result) => {
+  client.getToken(options, (error, result) => {
     let mess, content
 
     if (error) {
@@ -63,10 +64,9 @@ app.get('/callback', (req, res) => {
       mess = 'error'
       content = JSON.stringify(error)
     } else {
-      const token = oauth2.accessToken.create(result)
       mess = 'success'
       content = {
-        token: token.token.access_token,
+        token: result.token.access_token,
         provider: oauthProvider
       }
     }
