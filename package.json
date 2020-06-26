@@ -17,18 +17,11 @@
     "auth"
   ],
   "author": "Vaclav Klecanda <vencax77@gmail.com>",
-  "contributors": [
-    {
-      "name": "Rangel Stoilov",
-      "email": "rangelstoilov@gmail.com",
-      "url": "https://codingsrc.com"
-    }
-  ],
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.15.2",
     "randomstring": "^1.1.5",
-    "simple-oauth2": "^3.4.0"
+    "simple-oauth2": "^1.2.0"
   }
 }
