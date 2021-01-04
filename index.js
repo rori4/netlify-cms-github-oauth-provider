@@ -20,8 +20,8 @@ const oauth2 = simpleOauthModule.create({
   }
 })
 
-const originPattern = process.env.ORIGIN || ''
-if (('').match(originPattern)) {
+const origins = process.env.ORIGINS.split(` `) || [];
+if (origins.length === 0) {
   console.warn('Insecure ORIGIN pattern used. This can give unauthorized users access to your repository.')
   if (process.env.NODE_ENV === 'production') {
     console.error('Will not run without a safe ORIGIN pattern in production.')
@@ -75,8 +75,9 @@ app.get('/callback', (req, res) => {
     <script>
     (function() {
       function recieveMessage(e) {
+        let origins = ${JSON.stringify(origins)};
         console.log("recieveMessage %o", e)
-        if (!e.origin.match(${JSON.stringify(originPattern)})) {
+        if (!origins.includes(e.origin)) {
           console.log('Invalid origin: %s', e.origin);
           return;
         }
